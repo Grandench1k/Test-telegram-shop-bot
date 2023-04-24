@@ -9,7 +9,6 @@ import API.TestBot.Services.OrderService;
 import API.TestBot.Services.UserService;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -84,6 +83,7 @@ public class UpdateHandler {
                         return messageService.messageWithInteractiveKeyboard(RULES_TEXT, chatId);
                     }
                     case "\uD83D\uDE91Помощь\uD83D\uDE91", "/help" -> {
+                        assert userName != null;
                         if (!(userName.equals(ownerUserName))) {
                             return messageService.messageWithInteractiveKeyboard(EmojiParser.parseToUnicode("Команда /start нужна для того, чтобы начать работу с ботом \n"
                                     + "команда /profile нужна для того, чтобы увидеть свой id и баланс кошелька \n"

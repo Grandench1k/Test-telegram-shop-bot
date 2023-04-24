@@ -138,11 +138,11 @@ public class InLineKeyboardService {
         return firstList("Первый раздел", FIRST_LIST, "Второй раздел", SECOND_LIST);
     }
 
-    public InlineKeyboardMarkup firstlistOfProducts() {
+    public InlineKeyboardMarkup firstListOfProducts() {
         return list("Первый продукт", FIRST_PRODUCT, "Второй продукт", SECOND_PRODUCT);
     }
 
-    public InlineKeyboardMarkup secondlistOfProducts() {
+    public InlineKeyboardMarkup secondListOfProducts() {
         return list("Третий продукт", THIRD_PRODUCT, "Четвёртый продукт", FOURTH_PRODUCT);
     }
 }

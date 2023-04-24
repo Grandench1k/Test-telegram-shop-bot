@@ -10,9 +10,13 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Component
-public class BotInItializer {
+public class BotInitializer {
     @Autowired
     TestBot testBot;
+
+    public BotInitializer(TestBot testBot) {
+        this.testBot = testBot;
+    }
 
     @SneakyThrows
     @EventListener({ContextRefreshedEvent.class})

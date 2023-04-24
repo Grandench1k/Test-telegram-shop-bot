@@ -77,14 +77,14 @@ public class MessageService {
 
     public EditMessageText editMessageWithFirstListOfProducts(long chatId, int messageId) {
         EditMessageText editMessageText = editMessage("Cписок товаров: ", chatId, messageId);
-        editMessageText.setReplyMarkup(inLineKeyboardService.firstlistOfProducts());
+        editMessageText.setReplyMarkup(inLineKeyboardService.firstListOfProducts());
         return editMessageText;
     }
 
 
     public EditMessageText editMessageWithSecondListOfProducts(long chatId, int messageId) {
         EditMessageText editMessageText = editMessage("Cписок товаров: ", chatId, messageId);
-        editMessageText.setReplyMarkup(inLineKeyboardService.secondlistOfProducts());
+        editMessageText.setReplyMarkup(inLineKeyboardService.secondListOfProducts());
         return editMessageText;
     }
 
