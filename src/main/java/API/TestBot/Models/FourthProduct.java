@@ -16,6 +16,5 @@ public class FourthProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String fourthProductData;
 }

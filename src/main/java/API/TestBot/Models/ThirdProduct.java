@@ -16,7 +16,6 @@ public class ThirdProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String thirdProductData;
 
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Data
 @Builder
@@ -17,17 +18,11 @@ import lombok.NoArgsConstructor;
 public class UserDetails {
     @Id
     private Long chatId;
-
     private boolean isBuyingProducts;
-
     private boolean isDeposit;
-
     private int whatProduct;
-
     private int totalDeposit;
-
     private int TotalPurchases;
-
     private String previousCallBackQuery;
 
     public UserDetails(long chatId) {

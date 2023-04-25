@@ -13,9 +13,7 @@ import java.sql.Timestamp;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
-
     private final UserDetailsRepository userDetailsRepository;
 
     public void registrationUser(Update update) {
@@ -28,13 +26,15 @@ public class UserService {
         }
     }
 
-    public String userBuyProduct(User user, int price, String product) {
+    public String userBuyProduct(UserDetails userDetails, User user, int price, String product) {
         if (user.getBalance() < price) {
             return "У вас недостаточно средств на балансе, его можно пополнить в в разделе \"Профиль\"";
+        } else {
+            setUserTotalPurchases(userDetails, price);
+            user.setBalance(user.getBalance() - price);
+            userRepository.save(user);
+            return "Ваш товар: \n\n" + product + "\n\nСпасибо за покупку!";
         }
-        user.setBalance(user.getBalance() - price);
-        userRepository.save(user);
-        return "Ваш товар: \n\n" + product + "\n\nСпасибо за покупку!";
     }
 
     public void userSetWhatProductAndPreviousCallBackQuery(UserDetails userDetails, int whatProduct, String callBack) {
@@ -73,6 +73,11 @@ public class UserService {
 
     public void setUserTotalPurchases(UserDetails userDetails, int purchase) {
         userDetails.setTotalPurchases(userDetails.getTotalPurchases() + purchase);
+        userDetailsRepository.save(userDetails);
+    }
+
+    public void setUserDetailsDeposit(UserDetails userDetails) {
+        userDetails.setDeposit(true);
         userDetailsRepository.save(userDetails);
     }
 }

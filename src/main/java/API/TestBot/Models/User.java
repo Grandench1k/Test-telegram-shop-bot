@@ -19,11 +19,8 @@ import java.sql.Timestamp;
 public class User {
     @Id
     private Long chatId;
-
     private Integer balance = 0;
-
     private String userName;
-
     private Timestamp registeredAt;
 
     public User(Long chatId, String userName, Timestamp timestamp) {

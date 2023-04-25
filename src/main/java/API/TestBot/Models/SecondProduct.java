@@ -13,10 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "secondProductTable")
 public class SecondProduct {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String secondProductData;
 }

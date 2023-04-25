@@ -8,13 +8,10 @@ import org.springframework.context.annotation.PropertySource;
 @Data
 @PropertySource("application.properties")
 public class BotConfig {
-
     @org.springframework.beans.factory.annotation.Value("${telegram.bot.name}")
     String botName;
-
     @org.springframework.beans.factory.annotation.Value("${telegram.bot.token}")
     String token;
-
     @org.springframework.beans.factory.annotation.Value("${telegram.bot.ownerUserName}")
     String ownerUserName;
 }

@@ -8,19 +8,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+
 @RequiredArgsConstructor
 @Service
 public class OrderService {
     private final UserRepository userRepository;
-
     private final UserDetailsRepository userDetailsRepository;
-
     private final FirstProductRepository firstProductRepository;
-
     private final SecondProductRepository secondProductRepository;
-
     private final ThirdProductRepository thirdProductRepository;
-
     private final FourthProductRepository fourthProductRepository;
 
     public String buyProducts(Update update) {
@@ -31,16 +27,16 @@ public class OrderService {
             UserDetails userDetails = userDetailsRepository.findUserDetailsByChatId(chatId);
             int userBalance = user.getBalance();
             if (userDetails.getWhatProduct() == 1) {
-                return buyFirstProducts(update, user, userDetails, valueOfProducts, userBalance);
+                return buyFirstProducts(user, userDetails, valueOfProducts, userBalance);
             }
             if (userDetails.getWhatProduct() == 2) {
-                return buySecondProducts(update, user, userDetails, valueOfProducts, userBalance);
+                return buySecondProducts(user, userDetails, valueOfProducts, userBalance);
             }
             if (userDetails.getWhatProduct() == 3) {
-                return buyThirdProducts(update, user, userDetails, valueOfProducts, userBalance);
+                return buyThirdProducts(user, userDetails, valueOfProducts, userBalance);
             }
             if (userDetails.getWhatProduct() == 4) {
-                return buyFourthProducts(update, user, userDetails, valueOfProducts, userBalance);
+                return buyFourthProducts(user, userDetails, valueOfProducts, userBalance);
             }
             return null;
         } catch (NumberFormatException e) {
@@ -48,7 +44,7 @@ public class OrderService {
         }
     }
 
-    private String buyFirstProducts(Update update, User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
+    private String buyFirstProducts(User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
         List<FirstProduct> firstProductList = firstProductRepository.findAll();
         if (valueOfProducts <= 0) {
             return "Вы не можете меньше 1 товара";
@@ -82,7 +78,7 @@ public class OrderService {
         return null;
     }
 
-    private String buySecondProducts(Update update, User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
+    private String buySecondProducts(User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
         List<SecondProduct> secondProductList = secondProductRepository.findAll();
         if (valueOfProducts <= 0) {
             return "Вы не можете меньше 1 товара";
@@ -116,7 +112,7 @@ public class OrderService {
         return null;
     }
 
-    private String buyThirdProducts(Update update, User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
+    private String buyThirdProducts(User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
         List<ThirdProduct> thirdProductList = thirdProductRepository.findAll();
         if (valueOfProducts <= 0) {
             return "Вы не можете меньше 1 товара";
@@ -151,22 +147,19 @@ public class OrderService {
     }
 
 
-    public String buyFourthProducts(Update update, User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
+    public String buyFourthProducts(User user, UserDetails userDetails, int valueOfProducts, int userBalance) {
         List<FourthProduct> fourthProductList = fourthProductRepository.findAll();
         if (valueOfProducts <= 0) {
             return "Вы не можете меньше 1 товара";
-        }
-        if (valueOfProducts > fourthProductList.size()) {
+        } else if (valueOfProducts > fourthProductList.size()) {
             userDetails.setBuyingProducts(false);
             userRepository.save(user);
             return "Вы ввели количество товара, превыщающее товаров в наличии";
-        }
-        if (userBalance == 0 || userBalance < valueOfProducts * 30) {
+        } else if (userBalance == 0 || userBalance < valueOfProducts * 30) {
             userDetails.setBuyingProducts(false);
             userRepository.save(user);
             return "У вас недостаточно средств на балансе, его можно пополнить в в разделе \"Профиль\"";
-        }
-        if (userBalance >= valueOfProducts * 30) {
+        } else if (userBalance >= valueOfProducts * 30) {
             StringBuilder newText = new StringBuilder("Ваши товары: \n\n");
             long firstIdOfFourthProductList = fourthProductRepository.findAll().stream().findFirst().get().getId();
             long valueOfFourthProducts = firstIdOfFourthProductList + valueOfProducts;

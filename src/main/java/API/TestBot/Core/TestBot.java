@@ -1,6 +1,8 @@
 package API.TestBot.Core;
 
 import API.TestBot.Config.BotConfig;
+import API.TestBot.Handlers.UpdateHandler;
+import API.TestBot.Handlers.UpdateWithCallBackHandler;
 import API.TestBot.Services.BotCommandsService;
 import API.TestBot.Services.MessageService;
 import API.TestBot.Services.UserService;
@@ -14,17 +16,10 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 
 @Component
 public class TestBot extends TelegramLongPollingBot {
-
     private final MessageService messageService;
-
-
     private final UserService userService;
-
     private final BotConfig botConfig;
-
-
     private final UpdateHandler updateHandler;
-
     private final UpdateWithCallBackHandler updateWithCallBackHandler;
 
 
