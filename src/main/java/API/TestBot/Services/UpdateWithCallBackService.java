@@ -1,85 +1,17 @@
 package API.TestBot.Services;
 
-import API.TestBot.Models.*;
-import API.TestBot.Repositories.FirstProductRepository;
-import API.TestBot.Repositories.FourthProductRepository;
-import API.TestBot.Repositories.SecondProductRepository;
-import API.TestBot.Repositories.ThirdProductRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import API.TestBot.Models.User;
+import API.TestBot.Models.UserDetails;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
-import static API.TestBot.Constants.TelegramBotConstants.constants.*;
+public interface UpdateWithCallBackService {
+    EditMessageText callBackEqualFirstList(long chatId, int messageId, String LIST, UserDetails userDetails);
 
-@Service
-@RequiredArgsConstructor
-public class UpdateWithCallBackService {
-    private final UserService userService;
-    private final EditMessageService editMessageService;
-    private final FirstProductRepository firstProductRepository;
-    private final SecondProductRepository secondProductRepository;
-    private final ThirdProductRepository thirdProductRepository;
-    private final FourthProductRepository fourthProductRepository;
+    EditMessageText callBackEqualSecondList(long chatId, int messageId, String LIST, UserDetails userDetails);
 
-    public EditMessageText callBackEqualFirstList(long chatId, int messageId, String LIST, UserDetails userDetails) {
-        userService.userSetPreviousCallBackQuery(userDetails, LIST);
-        return editMessageService.editMessageWithFirstListOfProducts(chatId, messageId);
-    }
-    public EditMessageText callBackEqualSecondList(long chatId, int messageId, String LIST, UserDetails userDetails) {
-        userService.userSetPreviousCallBackQuery(userDetails, LIST);
-        return editMessageService.editMessageWithSecondListOfProducts(chatId, messageId);
-    }
+    EditMessageText callBackEqualProduct(int productSize, long chatId, int messageId, int whatProduct, String numberOfProduct, UserDetails userDetails, String PRODUCT);
 
-    public EditMessageText callBackEqualProduct(int productSize, long chatId, int messageId, int whatProduct, String numberOfProduct, UserDetails userDetails, String PRODUCT) {
-        userService.userSetWhatProductAndPreviousCallBackQuery(userDetails, whatProduct, PRODUCT);
-        if (productSize == 0) {
-            return editMessageService.editMessage(PRODUCT_MISSING, chatId, messageId);
-        } else if (productSize == 1) {
-            return editMessageService.editMessageTextWithKeyboardToPayOnlyOneProduct(numberOfProduct + " товар: \n Количество товара: " + productSize + " шт.", chatId, messageId);
-        } else {
-            return editMessageService.editMessageTextWithKeyboardToPayOneOrMultiplyProducts(numberOfProduct + " товар: \n Количество товара: " + productSize + " шт.", chatId, messageId);
-        }
-    }
+    EditMessageText callBackEqualOnePurchase(UserDetails userDetails, User user, int userProduct, long chatId, int messageId);
 
-    public EditMessageText callBackEqualOnePurchase(UserDetails userDetails, User user, int userProduct, long chatId, int messageId) {
-        if (userProduct == 1) {
-            FirstProduct firstProduct = firstProductRepository.findAll().stream().findFirst().get();
-            firstProductRepository.deleteById(firstProduct.getId());
-            return editMessageService.editMessage(userService.userBuyProduct(userDetails, user, 15, firstProduct.getFirstProductData()), chatId, messageId);
-        } else if (userProduct == 2) {
-            SecondProduct secondProduct = secondProductRepository.findAll().stream().findFirst().get();
-            secondProductRepository.deleteById(secondProduct.getId());
-            return editMessageService.editMessage(userService.userBuyProduct(userDetails, user, 20, secondProduct.getSecondProductData()), chatId, messageId);
-        } else if (userProduct == 3) {
-            ThirdProduct thirdProduct = thirdProductRepository.findAll().stream().findFirst().get();
-            thirdProductRepository.deleteById(thirdProduct.getId());
-            return editMessageService.editMessage(userService.userBuyProduct(userDetails, user, 25, thirdProduct.getThirdProductData()), chatId, messageId);
-        } else if (userProduct == 4) {
-            FourthProduct fourthProduct = fourthProductRepository.findAll().stream().findFirst().get();
-            fourthProductRepository.deleteById(fourthProduct.getId());
-            return editMessageService.editMessage(userService.userBuyProduct(userDetails, user, 30, fourthProduct.getFourthProductData()), chatId, messageId);
-        } else {
-            return editMessageService.editMessage("У вас недостаточно средств на балансе, его можно пополнить в разделе \"Профиль\"", chatId, messageId);
-        }
-    }
-
-    public EditMessageText callBackEqualsBack(long chatId, int messageId, UserDetails userDetails) {
-        switch (userDetails.getPreviousCallBackQuery()) {
-            case FIRST_LIST, SECOND_LIST -> {
-                return editMessageService.editedMessageWithListOfLists(chatId, messageId);
-            }
-            case FIRST_PRODUCT, SECOND_PRODUCT -> {
-                userService.userSetPreviousCallBackQuery(userDetails, FIRST_LIST);
-                return editMessageService.editMessageWithFirstListOfProducts(chatId, messageId);
-            }
-            case THIRD_PRODUCT, FOURTH_PRODUCT -> {
-                userService.userSetPreviousCallBackQuery(userDetails, SECOND_LIST);
-                return editMessageService.editMessageWithSecondListOfProducts(chatId, messageId);
-            }
-            case DEPOSIT -> {
-                return editMessageService.editMessageWithProfile(chatId, messageId);
-            }
-        }
-        return editMessageService.editMessage("Команда не найдена", chatId, messageId);
-    }
+    EditMessageText callBackEqualsBack(long chatId, int messageId, UserDetails userDetails);
 }
